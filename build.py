@@ -131,13 +131,10 @@ def render_incident(meta):
 
 
 def main():
-    if not os.path.isdir(INCIDENTS_DIR):
-        raise SystemExit(f"No '{INCIDENTS_DIR}/' directory found.")
-
-    incidents = []
-    for fname in sorted(os.listdir(INCIDENTS_DIR)):
-        if fname.endswith(".md"):
-            incidents.append(parse_incident(os.path.join(INCIDENTS_DIR, fname)))
+    # Tolerant of a missing/empty incidents/ dir — Git doesn't track empty
+    # directories, so a freshly-cleared incidents/ folder won't exist at all
+    # right after a push, until the first real incident file lands in it.
+    incidents = load_entries(INCIDENTS_DIR)
 
     # Most recent first (dates are "YYYY-MM" strings, so string sort works)
     incidents.sort(key=lambda m: str(m["date"]), reverse=True)
