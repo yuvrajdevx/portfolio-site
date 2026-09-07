@@ -959,9 +959,9 @@
           <div class="card-title">production-aws-platform</div>
           <div class="card-status status-green"><span class="dot dot-green"></span> Completed</div>
         </div>
-        <p class="desc">A fully Terraform-managed AWS platform — 3 environments (prod, non-prod, shared services), 3 EKS clusters, CI/CD, observability, and automated security scanning. No click-ops, everything is code. A clean, documented rebuild of patterns I run in production at work.</p>
+        <p class="desc">A fully Terraform-managed AWS platform — 3 isolated environments (prod, non-prod, shared services), reusable VPC and EKS modules, remote state via S3 with native locking, and IRSA (OIDC) for pod-level IAM instead of static node credentials. CI runs fmt/validate/tflint/checkov on every PR (credential-free, static analysis only), with matching pre-commit hooks and terraform-docs-generated module READMEs. No click-ops, everything is code. A clean, documented rebuild of patterns I run in production at work.</p>
         <div class="card-tags">
-          <span class="tag">Terraform</span><span class="tag">AWS</span><span class="tag">EKS</span><span class="tag">Jenkins</span><span class="tag">Spinnaker</span><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Prowler</span>
+          <span class="tag">Terraform</span><span class="tag">AWS</span><span class="tag">EKS</span><span class="tag">VPC</span><span class="tag">S3</span><span class="tag">IAM/IRSA</span><span class="tag">GitHub Actions</span><span class="tag">tflint</span><span class="tag">Checkov</span><span class="tag">pre-commit</span>
         </div>
         <a href="https://github.com/yuvrajdevx/production-grade-aws" class="card-link" target="_blank" rel="noopener">View on GitHub →</a>
       </div>
