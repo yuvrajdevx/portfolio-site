@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yuvraj Singh — SRE | DevOps | Platform Engineer</title>
 <meta name="description" content="Site Reliability Engineer portfolio — infrastructure, incident response, and postmortems.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBCMEUxNCIvPgogIDxyZWN0IHg9IjEiIHk9IjEiIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgcng9IjYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzIzMkIzQSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8dGV4dCB4PSIxNiIgeT0iMjIiIGZvbnQtZmFtaWx5PSInSmV0QnJhaW5zIE1vbm8nLCBNZW5sbywgQ29uc29sYXMsIG1vbm9zcGFjZSIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzNGQjk1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Jmd0O188L3RleHQ+Cjwvc3ZnPgo=">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -116,6 +117,57 @@
     50%{ box-shadow: 0 0 0 6px rgba(63,185,80,0.06); }
   }
 
+  /* ---------- FX LAYER ---------- */
+  #bg-canvas{
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .scanlines{
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: overlay;
+    animation: scan-drift 9s linear infinite;
+  }
+  @keyframes scan-drift{
+    0%{ background-position: 0 0; }
+    100%{ background-position: 0 240px; }
+  }
+  .spotlight{
+    position: fixed;
+    width: 480px;
+    height: 480px;
+    left: 0; top: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(88,166,255,0.16), rgba(63,185,80,0.05) 45%, transparent 70%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    will-change: transform;
+  }
+  .spotlight.active{ opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce){
+    #bg-canvas, .scanlines, .spotlight{ display: none; }
+  }
+  @media (pointer: coarse){
+    .spotlight{ display: none; }
+  }
+
   /* ---------- REVEAL ---------- */
   .reveal{
     opacity: 0;
@@ -139,14 +191,94 @@
     font-size: clamp(36px, 6vw, 56px);
     letter-spacing: -0.01em;
     margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(100deg, var(--text) 25%, var(--blue) 42%, var(--green) 52%, var(--text) 70%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 4.2s linear infinite;
+  }
+  @keyframes shimmer{ to{ background-position: -220% center; } }
+
+  .hero h1.glitch::before,
+  .hero h1.glitch::after{
+    content: attr(data-text);
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    background: none;
+    -webkit-text-fill-color: initial;
+    opacity: 0;
+    overflow: hidden;
+  }
+  .hero h1.glitch::before{
+    color: var(--red);
+    text-shadow: -2px 0 var(--red);
+    animation: glitch-r 3s infinite;
+  }
+  .hero h1.glitch::after{
+    color: var(--blue);
+    text-shadow: 2px 0 var(--blue);
+    animation: glitch-b 3s infinite;
+    animation-delay: 0.04s;
+  }
+  @keyframes glitch-r{
+    0%, 28%, 100%{ opacity: 0; clip-path: inset(45% 0 45% 0); transform: translate(0,0); }
+    30%{ opacity: 0.85; clip-path: inset(10% 0 75% 0); transform: translate(3px,-2px); }
+    33%{ opacity: 0.85; clip-path: inset(55% 0 15% 0); transform: translate(-3px,1px); }
+    36%{ opacity: 0.7; clip-path: inset(25% 0 55% 0); transform: translate(2px,0); }
+    39%{ opacity: 0.85; clip-path: inset(65% 0 20% 0); transform: translate(-2px,1px); }
+    42%{ opacity: 0.7; clip-path: inset(5% 0 80% 0); transform: translate(3px,-1px); }
+    45%{ opacity: 0.85; clip-path: inset(45% 0 35% 0); transform: translate(-1px,1px); }
+    48%{ opacity: 0.6; clip-path: inset(30% 0 50% 0); transform: translate(2px,0); }
+    50%, 68%{ opacity: 0; clip-path: inset(45% 0 45% 0); transform: translate(0,0); }
+    70%{ opacity: 0.8; clip-path: inset(60% 0 10% 0); transform: translate(-2px,1px); }
+    73%{ opacity: 0.8; clip-path: inset(15% 0 65% 0); transform: translate(2px,-1px); }
+    76%{ opacity: 0.65; clip-path: inset(50% 0 25% 0); transform: translate(-3px,0); }
+    79%{ opacity: 0.8; clip-path: inset(20% 0 60% 0); transform: translate(2px,1px); }
+    82%{ opacity: 0.6; clip-path: inset(70% 0 8% 0); transform: translate(-1px,-1px); }
+    85%{ opacity: 0.75; clip-path: inset(35% 0 40% 0); transform: translate(1px,0); }
+    88%{ opacity: 0; clip-path: inset(45% 0 45% 0); transform: translate(0,0); }
+  }
+  @keyframes glitch-b{
+    0%, 26%, 100%{ opacity: 0; clip-path: inset(45% 0 45% 0); transform: translate(0,0); }
+    28%{ opacity: 0.8; clip-path: inset(60% 0 15% 0); transform: translate(-3px,1px); }
+    31%{ opacity: 0.8; clip-path: inset(15% 0 65% 0); transform: translate(3px,-1px); }
+    34%{ opacity: 0.65; clip-path: inset(40% 0 35% 0); transform: translate(-2px,0); }
+    37%{ opacity: 0.8; clip-path: inset(20% 0 60% 0); transform: translate(2px,-1px); }
+    40%{ opacity: 0.65; clip-path: inset(75% 0 5% 0); transform: translate(-3px,1px); }
+    43%{ opacity: 0.8; clip-path: inset(35% 0 45% 0); transform: translate(1px,-1px); }
+    46%{ opacity: 0.55; clip-path: inset(55% 0 25% 0); transform: translate(-2px,0); }
+    48%, 66%{ opacity: 0; clip-path: inset(45% 0 45% 0); transform: translate(0,0); }
+    68%{ opacity: 0.75; clip-path: inset(30% 0 50% 0); transform: translate(2px,-1px); }
+    71%{ opacity: 0.75; clip-path: inset(65% 0 10% 0); transform: translate(-2px,1px); }
+    74%{ opacity: 0.55; clip-path: inset(10% 0 70% 0); transform: translate(1px,0); }
+    77%{ opacity: 0.75; clip-path: inset(50% 0 30% 0); transform: translate(-2px,-1px); }
+    80%{ opacity: 0.6; clip-path: inset(18% 0 62% 0); transform: translate(2px,1px); }
+    83%{ opacity: 0.7; clip-path: inset(42% 0 38% 0); transform: translate(-1px,0); }
+    86%{ opacity: 0; clip-path: inset(45% 0 45% 0); transform: translate(0,0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero h1{ animation: none; background-position: 0 center; }
+    .hero h1.glitch::before, .hero h1.glitch::after{ display: none; }
   }
   .hero .role{
     color: var(--muted);
     font-size: 18px;
     margin-bottom: 22px;
   }
+  .hero-actions{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 20px;
+  }
   .status-pill{
-    display: inline-flex;
+    display: flex;
+    width: fit-content;
     align-items: center;
     gap: 8px;
     background: var(--panel);
@@ -154,12 +286,39 @@
     padding: 7px 14px;
     border-radius: 999px;
     font-size: 13px;
-    margin-bottom: 36px;
   }
   .status-pill .dot{
     width: 8px; height: 8px; border-radius: 50%;
     background: var(--green);
     animation: pulse 2.4s ease-in-out infinite;
+  }
+  .resume-btn.hero-cta{ margin-top: 0; }
+
+  .quick-about{
+    display: inline-flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 28px;
+    padding: 14px 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+  }
+  .qa-row{ display: flex; gap: 14px; align-items: baseline; }
+  .qa-label{
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: 130px;
+    flex-shrink: 0;
+  }
+  .qa-value{ color: var(--text); }
+  @media (max-width: 520px){
+    .qa-row{ flex-direction: column; gap: 2px; }
+    .qa-label{ width: auto; }
   }
 
   .stat-row{
@@ -242,7 +401,11 @@
     gap: 14px;
     transition: border-color 0.2s ease, transform 0.2s ease;
   }
-  .card:hover{ border-color: var(--blue); transform: translateY(-2px); }
+  .card:hover{
+    border-color: var(--blue);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(88,166,255,0.18), 0 0 0 1px rgba(88,166,255,0.25);
+  }
   .card.muted{ opacity: 0.68; }
   .card-top{
     display: flex;
@@ -291,6 +454,15 @@
   }
   .card-link{ font-size: 13px; font-weight: 500; }
 
+  .sev-breakdown{
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .sev-breakdown .b-sev1{ color: var(--red); }
+  .sev-breakdown .b-sev2{ color: var(--amber); }
+  .sev-breakdown .b-sev3{ color: var(--blue); }
+
   /* ---------- INCIDENT LOG ---------- */
   .incident-list{ display: flex; flex-direction: column; gap: 14px; }
   details.incident{
@@ -300,6 +472,18 @@
     overflow: hidden;
   }
   details.incident[open]{ border-color: var(--panel-alt); }
+  details.incident.pinned{ border-color: rgba(88,166,255,0.35); }
+  .pin-badge{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--blue);
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.3);
+    border-radius: 5px;
+    padding: 3px 8px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
   details.incident summary{
     list-style: none;
     cursor: pointer;
@@ -350,11 +534,162 @@
   }
   .incident-body p{ margin: 12px 0; color: var(--text); }
   .incident-body strong{ color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 2px; font-family: 'JetBrains Mono', monospace; }
+  .incident-body pre{
+    background: #05070b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 10px 0 16px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--green);
+  }
+  .incident-body code{ font-family: 'JetBrains Mono', monospace; }
+  .incident-body p code{
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 12px;
+    color: var(--blue);
+  }
   .anon-note{
     margin-top: 20px;
     font-size: 13px;
     color: var(--muted);
     font-style: italic;
+  }
+
+  .incident-search{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .incident-search:focus-within{ border-color: var(--blue); box-shadow: 0 0 0 3px rgba(88,166,255,0.12); }
+  .search-part{ color: var(--muted); font-size: 13px; white-space: nowrap; }
+  .search-input{
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--green);
+    font-size: 13px;
+    flex: 1;
+    min-width: 80px;
+    padding: 2px 1px;
+  }
+  .search-input::placeholder{ color: var(--gray); }
+  .search-empty{
+    color: var(--muted);
+    font-size: 13px;
+    padding: 4px 2px 4px;
+  }
+  .incident-toggle{
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+    background: none;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 11px 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .incident-toggle:hover{ border-color: var(--blue); color: var(--blue); }
+  details.incident.is-hidden{ display: none; }
+
+  /* ---------- EXPERIENCE ---------- */
+  .exp-list{ display: flex; flex-direction: column; gap: 14px; }
+  .exp-entry{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .exp-top{
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .exp-role{ font-weight: 600; font-size: 15px; }
+  .exp-company{ color: var(--blue); font-size: 14px; }
+  .exp-meta{
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 4px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .exp-location::before{ content: "· "; }
+  .exp-body{ margin-top: 12px; font-size: 14px; color: var(--text); }
+  .exp-body ul{ margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .exp-body p{ margin: 8px 0; }
+
+  /* ---------- CERTIFICATIONS ---------- */
+  .certs-list{ display: flex; flex-direction: column; gap: 10px; }
+  .cert-entry{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+  .cert-name{ font-weight: 500; font-size: 14px; flex: 1; min-width: 200px; }
+  .cert-meta{ color: var(--muted); font-size: 12px; }
+  .cert-verify{ font-size: 13px; font-weight: 500; flex-shrink: 0; }
+  .cert-body{ flex-basis: 100%; font-size: 13px; color: var(--text); margin-top: 2px; }
+  .cert-body p{ margin: 0; }
+
+  .section-empty{
+    color: var(--muted);
+    font-size: 13px;
+    padding: 4px 0;
+  }
+
+  /* ---------- TECHNICAL SKILLS ---------- */
+  .tsk-grid{
+    column-count: 2;
+    column-gap: 16px;
+  }
+  @media (max-width: 780px){
+    .tsk-grid{ column-count: 1; }
+  }
+  .tsk-card{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    break-inside: avoid;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .tsk-card:hover{ border-color: var(--panel-alt); box-shadow: 0 0 24px rgba(88,166,255,0.06); }
+  .tsk-head{ font-weight: 600; font-size: 14px; margin-bottom: 12px; }
+  .tsk-sub{ margin-bottom: 14px; }
+  .tsk-sub:last-child{ margin-bottom: 0; }
+  .tsk-sub-label{
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
   }
 
   /* ---------- SKILLS ---------- */
@@ -394,11 +729,31 @@
     padding: 26px 28px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 14px;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
   }
-  .terminal .line{ margin-bottom: 10px; }
+  .terminal:hover{
+    border-color: rgba(63,185,80,0.4);
+    box-shadow: 0 0 0 1px rgba(63,185,80,0.15), 0 0 40px rgba(63,185,80,0.08);
+  }
+  .terminal .line{ margin-bottom: 10px; opacity: 0; }
+  .terminal .line.typed{ opacity: 1; }
   .terminal .prompt{ color: var(--green); }
-  .terminal .out{ color: var(--muted); padding-left: 18px; display: block; margin: 4px 0; }
+  .terminal .out{ color: var(--muted); padding-left: 18px; display: block; margin: 4px 0; opacity: 0; }
+  .terminal .out.typed{ opacity: 1; }
   .terminal .out a{ color: var(--blue); }
+  .type-cursor{
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--green);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink-cursor 0.9s steps(1) infinite;
+  }
+  @keyframes blink-cursor{ 50%{ opacity: 0; } }
+  @media (prefers-reduced-motion: reduce){
+    .terminal .line, .terminal .out{ opacity: 1; }
+    .type-cursor{ display: none; }
+  }
   .resume-btn{
     display: inline-block;
     margin-top: 16px;
@@ -410,8 +765,9 @@
     padding: 10px 18px;
     border-radius: 7px;
     text-decoration: none;
+    transition: opacity 0.4s ease, box-shadow 0.2s ease;
   }
-  .resume-btn:hover{ text-decoration: none; opacity: 0.9; }
+  .resume-btn:hover{ text-decoration: none; opacity: 0.9 !important; box-shadow: 0 0 20px rgba(88,166,255,0.4); }
 
   footer{
     padding: 32px 0 48px;
@@ -420,20 +776,36 @@
     font-size: 12px;
   }
 
+  footer .log-line{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  footer .log-tag-info{ color: var(--green); }
+  footer .log-tag-warn{ color: var(--amber); }
+
   @media (max-width: 780px){
     .stat-row{ grid-template-columns: repeat(2, 1fr); }
   }
+
+
 </style>
 </head>
 <body>
 
+<canvas id="bg-canvas"></canvas>
+<div class="scanlines"></div>
+<div class="spotlight" id="spotlight"></div>
+
 <header class="nav">
   <div class="nav-inner">
-    <div class="nav-logo"><span class="dot"></span> yuvraj-singh.dev</div>
+    <div class="nav-logo"><span class="dot"></span> yuvraj@portfolio:~$</div>
     <ul class="nav-links">
-      <li><a href="#services">Services</a></li>
+      <li><a href="#tech-skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#certifications">Certs</a></li>
       <li><a href="#incidents">Incidents</a></li>
-      <li><a href="#skills">Skills</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
@@ -442,11 +814,22 @@
 <main class="wrap">
 
   <section class="hero">
-    <span class="eyebrow mono">$ curl status.yuvrajsingh.dev</span>
-    <h1>Yuvraj Singh</h1>
-    <div class="role">I keep production systems alive | SRE | DevOps | Platform Engineer | 1 Year of Real Production Ownership</div>
-    <div class="status-pill"><span class="dot"></span> All Systems Operational</div>
+    <h1 class="glitch" data-text="Yuvraj Singh">Yuvraj Singh</h1>
+    <div class="role">I keep production systems alive | DevOps &amp; Site Reliability Engineer | Incident Response &amp; Cloud Infrastructure Engineering</div>
 
+    <div class="quick-about mono">
+      <div class="qa-row"><span class="qa-label">Degree</span><span class="qa-value">B.Tech CSE — Netaji Subhas University of Technology (formerly NSIT)</span></div>
+      <div class="qa-row"><span class="qa-label">Incidents resolved</span><span class="qa-value">30+</span></div>
+      <div class="qa-row"><span class="qa-label">Cost Saved</span><span class="qa-value">$36K+/yr</span></div>
+      <div class="qa-row"><span class="qa-label">Experience</span><span class="qa-value" id="hero-experience">—</span></div>
+    </div>
+
+    <div class="hero-actions">
+      <a href="#contact" class="resume-btn hero-cta">Get In Touch</a>
+      <div class="status-pill"><span class="dot"></span> Open to Opportunities</div>
+    </div>
+
+    <!--
     <div class="stat-row reveal">
       <div>
         <div class="stat-label">Uptime since</div>
@@ -465,7 +848,9 @@
         <div class="stat-value blue">Open to work</div>
       </div>
     </div>
+    -->
 
+    <!--
     <div class="service-list reveal">
       <div class="service-row">
         <div class="service-name"><span class="dot dot-green"></span> Infrastructure &amp; IaC</div>
@@ -484,90 +869,144 @@
         <div class="service-status status-green">Operational</div>
       </div>
       <div class="service-row">
-        <div class="service-name"><span class="dot dot-amber"></span> Continuous Learning (eBPF, service mesh)</div>
-        <div class="service-status status-amber">Investigating</div>
+        <div class="service-name"><span class="dot dot-amber"></span> Continuous Learning</div>
+        <div class="service-status status-amber">In-Progress</div>
+      </div>
+    </div>
+    -->
+  </section>
+
+  <section id="tech-skills">
+    <div class="section-head reveal">
+      <span class="eyebrow mono">$ ls -la /skills</span>
+      <h2>Technical Skills</h2>
+      <p>Tools and platforms I've actually worked with.</p>
+    </div>
+
+    <div class="tsk-grid reveal">
+      <div class="tsk-card">
+        <div class="tsk-head">☁️ AWS</div>
+        <div class="card-tags"><span class="tag">IAM</span><span class="tag">CloudFormation</span><span class="tag">EKS</span><span class="tag">EC2</span><span class="tag">ELB</span><span class="tag">ALB</span><span class="tag">NLB</span><span class="tag">Lambda</span><span class="tag">Route 53</span><span class="tag">SQS</span><span class="tag">SNS</span><span class="tag">Aurora</span><span class="tag">RDS</span><span class="tag">DocumentDB</span><span class="tag">DynamoDB</span><span class="tag">ElastiCache</span><span class="tag">EventBridge</span><span class="tag">Secrets Manager</span><span class="tag">Certificate Manager</span><span class="tag">EFS</span><span class="tag">EBS</span><span class="tag">Cost Explorer</span><span class="tag">Budgets</span><span class="tag">VPC</span><span class="tag">S3</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">🔷 Azure</div>
+        <div class="card-tags"><span class="tag">AKS</span><span class="tag">Virtual Machines</span><span class="tag">SQL Database</span><span class="tag">Entra ID</span><span class="tag">Azure DevOps</span><span class="tag">Azure Key Vault</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">🌐 GCP</div>
+        <div class="card-tags"><span class="tag">Cloud Functions</span><span class="tag">BigQuery</span><span class="tag">Compute Engine</span><span class="tag">Looker</span><span class="tag">Artifact Registry</span><span class="tag">Pub/Sub</span><span class="tag">Data Catalog</span><span class="tag">Analytics Hub</span><span class="tag">BigLake</span><span class="tag">IAM</span><span class="tag">Firewall</span><span class="tag">GKE</span><span class="tag">Cloud Storage</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">🐳 Containerization &amp; Orchestration</div>
+        <div class="card-tags"><span class="tag">Kubernetes</span><span class="tag">Docker</span><span class="tag">Helm</span><span class="tag">Kong</span><span class="tag">ArgoCD</span><span class="tag">RKE2</span><span class="tag">Rancher</span><span class="tag">NGINX Ingress Controller</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">📦 Infrastructure as Code</div>
+        <div class="card-tags"><span class="tag">Terraform</span><span class="tag">CloudFormation</span><span class="tag">Ansible</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">🔄 CI/CD &amp; GitOps</div>
+        <div class="card-tags"><span class="tag">Jenkins</span><span class="tag">GitHub Actions</span><span class="tag">Spinnaker</span><span class="tag">Azure DevOps</span><span class="tag">Bitbucket Pipelines</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">📊 Monitoring &amp; Observability</div>
+        <div class="card-tags"><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">OpenSearch</span><span class="tag">Kibana</span><span class="tag">Loki</span><span class="tag">Fluentd</span><span class="tag">Fluent Bit</span><span class="tag">PagerDuty</span><span class="tag">Squadcast</span><span class="tag">New Relic</span><span class="tag">CloudWatch Alarms</span><span class="tag">Alertmanager</span><span class="tag">SigNoz</span><span class="tag">TLS/SSL</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">🔐 Security &amp; Secrets</div>
+        <div class="card-tags"><span class="tag">HashiCorp Vault</span><span class="tag">Prowler</span><span class="tag">Tenable</span><span class="tag">Security Groups</span><span class="tag">NACLs</span><span class="tag">AWS Secrets Manager</span><span class="tag">Azure Key Vault</span><span class="tag">IAM/OIDC</span><span class="tag">WAF</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">🗄️ Databases &amp; Messaging</div>
+        <div class="card-tags"><span class="tag">RDS</span><span class="tag">Aurora</span><span class="tag">DocumentDB</span><span class="tag">DynamoDB</span><span class="tag">ElastiCache</span><span class="tag">MySQL</span><span class="tag">PostgreSQL</span><span class="tag">MongoDB</span><span class="tag">MariaDB</span><span class="tag">SNS</span><span class="tag">SQS</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">⚡ Scripting &amp; Languages</div>
+        <div class="card-tags"><span class="tag">Python</span><span class="tag">Bash</span><span class="tag">PowerShell</span><span class="tag">YAML</span><span class="tag">JSON</span><span class="tag">C++</span><span class="tag">Java</span><span class="tag">JavaScript</span><span class="tag">Kotlin</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">🤖 AI / ML Infrastructure</div>
+        <div class="card-tags"><span class="tag">Qdrant</span><span class="tag">AWS Bedrock</span><span class="tag">LLM API Integrations</span><span class="tag">Vertex AI Platform</span><span class="tag">Natural Language API</span><span class="tag">Speech-to-Text</span><span class="tag">Text-to-Speech</span></div>
+      </div>
+
+      <div class="tsk-card">
+        <div class="tsk-head">🌐 Networking &amp; CDN</div>
+        <div class="card-tags"><span class="tag">Cloudflare</span><span class="tag">VPC Design</span><span class="tag">NAT Gateway</span><span class="tag">Internet Gateway</span><span class="tag">Route Tables</span><span class="tag">VPC Flow Logs</span></div>
       </div>
     </div>
   </section>
 
-  <section id="services">
+  <section id="projects">
     <div class="section-head reveal">
       <span class="eyebrow mono">$ kubectl get services</span>
-      <h2>Service Catalog</h2>
+      <h2>Projects</h2>
       <p>Things I've built, broken, and fixed — mostly on purpose.</p>
     </div>
 
     <div class="cards reveal">
       <div class="card">
         <div class="card-top">
-          <div class="card-title">zero-downtime-migration</div>
-          <div class="card-status status-green"><span class="dot dot-green"></span> Operational</div>
+          <div class="card-title">production-aws-platform</div>
+          <div class="card-status status-green"><span class="dot dot-green"></span> Completed</div>
         </div>
-        <p class="desc">Migrated a monolith's core services to Kubernetes with rolling deploys — zero customer-facing downtime across the cutover.</p>
-        <div class="card-metrics">
-          <span class="metric">Deploy time: 45m → 4m</span>
-          <span class="metric">Rollback: 20m → 90s</span>
-        </div>
+        <p class="desc">A fully Terraform-managed AWS platform — 3 environments (prod, non-prod, shared services), 3 EKS clusters, CI/CD, observability, and automated security scanning. No click-ops, everything is code. A clean, documented rebuild of patterns I run in production at work.</p>
         <div class="card-tags">
-          <span class="tag">Kubernetes</span><span class="tag">Terraform</span><span class="tag">Helm</span><span class="tag">ArgoCD</span>
+          <span class="tag">Terraform</span><span class="tag">AWS</span><span class="tag">EKS</span><span class="tag">Jenkins</span><span class="tag">Spinnaker</span><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Prowler</span>
         </div>
-        <a href="#" class="card-link">Case study →</a>
+        <a href="https://github.com/yuvrajdevx/production-grade-aws" class="card-link" target="_blank" rel="noopener">View on GitHub →</a>
       </div>
 
       <div class="card">
         <div class="card-top">
-          <div class="card-title">cicd-pipeline-overhaul</div>
-          <div class="card-status status-green"><span class="dot dot-green"></span> Operational</div>
+          <div class="card-title">cloud-db-scheduler</div>
+          <div class="card-status status-green"><span class="dot dot-green"></span> Completed</div>
         </div>
-        <p class="desc">Rebuilt a legacy Jenkins pipeline into a modular, parallelized system with automated rollback on failed health checks.</p>
+        <p class="desc">Automated stop/start scheduling for non-prod AWS databases across a multi-account setup, using AWS Instance Scheduler — plus a custom Lambda working around an AWS quirk where stopped Aurora/DocumentDB clusters auto-restart after 7 days. Includes a self-service GitHub Actions workflow so developers can start/stop a database on demand without AWS Console access.</p>
         <div class="card-metrics">
-          <span class="metric">Build time: −68%</span>
-          <span class="metric">Failed deploys: −80%</span>
+          <span class="metric">Non-prod DB runtime: −75%</span>
         </div>
         <div class="card-tags">
-          <span class="tag">GitHub Actions</span><span class="tag">Docker</span><span class="tag">Terraform</span><span class="tag">Prometheus</span>
+          <span class="tag">AWS Instance Scheduler</span><span class="tag">RDS</span><span class="tag">Aurora</span><span class="tag">DocumentDB</span><span class="tag">Lambda</span><span class="tag">EventBridge</span><span class="tag">GitHub Actions</span><span class="tag">Python</span>
         </div>
-        <a href="#" class="card-link">Case study →</a>
+        <a href="https://github.com/yuvrajdevx/cloud-db-scheduler" class="card-link" target="_blank" rel="noopener">View on GitHub →</a>
       </div>
 
       <div class="card">
         <div class="card-top">
-          <div class="card-title">rate-limiter-writeup</div>
-          <div class="card-status status-green"><span class="dot dot-green"></span> Published</div>
+          <div class="card-title">open-ingress-detector</div>
+          <div class="card-status status-green"><span class="dot dot-green"></span> Completed</div>
         </div>
-        <p class="desc">A deep dive into the algorithms behind distributed rate limiting — token bucket, sliding window, and why the naive version breaks under load.</p>
+        <p class="desc">A serverless, real-time detector for risky network exposure. EventBridge captures security group and NACL changes (including CreateNetworkAclEntry / ReplaceNetworkAclEntry) and triggers a Lambda that inspects the rule — if a 0.0.0.0/0 or ::/0 inbound rule is found, it fires an instant Slack alert with the resource name and ID.</p>
         <div class="card-tags">
-          <span class="tag">Distributed Systems</span><span class="tag">Algorithms</span><span class="tag">Go</span>
+          <span class="tag">EventBridge</span><span class="tag">Lambda</span><span class="tag">Security Groups</span><span class="tag">NACLs</span><span class="tag">Slack Webhook</span><span class="tag">Serverless</span>
         </div>
-        <a href="#" class="card-link">Read the writeup →</a>
+        <a href="https://github.com/yuvrajdevx/open-ingress-detector" class="card-link" target="_blank" rel="noopener">View on GitHub →</a>
       </div>
 
-      <div class="card muted">
+      <div class="card">
         <div class="card-top">
-          <div class="card-title">campus-app</div>
-          <div class="card-status status-gray"><span class="dot dot-gray"></span> Archived</div>
+          <div class="card-title">portfolio-site</div>
+          <div class="card-status status-green"><span class="dot dot-green"></span> Completed</div>
         </div>
-        <p class="desc">An Android app from college — my first real shipped software. Kept here because everything starts somewhere.</p>
+        <p class="desc">No CMS. No database. Just markdown files, a Python build script, and GitHub Actions doing the rest.</p>
         <div class="card-tags">
-          <span class="tag">Kotlin</span><span class="tag">Android</span>
+          <span class="tag">Python</span><span class="tag">GitHub Actions</span><span class="tag">CI/CD</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span><span class="tag">YAML</span>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="incidents">
-    <div class="section-head reveal">
-      <span class="eyebrow mono">$ tail -f incidents.log</span>
-      <h2>Incident Log</h2>
-      <p>Selected postmortems. Client and company details are anonymized to respect NDAs — the failures and fixes are real.</p>
-    </div>
-
-    <div class="incident-list reveal">
-<!-- INCIDENTS -->
-    </div>
-    <p class="anon-note reveal">All incident details above are anonymized — company names, exact traffic figures, and identifying specifics have been changed or generalized. The technical substance is unchanged.</p>
-  </section>
-
+  <!--
   <section id="skills">
     <div class="section-head reveal">
       <span class="eyebrow mono">$ top</span>
@@ -586,10 +1025,57 @@
       <div class="skill-row cold"><div class="skill-top"><span>Android / Kotlin — cold storage</span><span>20%</span></div><div class="skill-track"><div class="skill-fill gray" data-width="20"></div></div></div>
     </div>
   </section>
+  -->
+
+  <section id="experience">
+    <div class="section-head reveal">
+      <span class="eyebrow mono">$ cat experience.log</span>
+      <h2>Experience</h2>
+      <p>Where I've actually worked.</p>
+    </div>
+
+    <div class="exp-list reveal">
+<!-- EXPERIENCE -->
+    </div>
+  </section>
+
+  <section id="certifications">
+    <div class="section-head reveal">
+      <span class="eyebrow mono">$ ls certifications/</span>
+      <h2>Certifications</h2>
+      <p>Credentials, verified.</p>
+    </div>
+
+    <div class="certs-list reveal">
+<!-- CERTS -->
+    </div>
+  </section>
+
+  <section id="incidents">
+    <div class="section-head reveal">
+      <span class="eyebrow mono">$ tail -f incidents.log</span>
+      <h2>Incident Log</h2>
+      <p>Selected postmortems. Client and company details are anonymized to respect NDAs — the failures and fixes are real.</p>
+      <p class="sev-breakdown mono">__SEV_BREAKDOWN__</p>
+    </div>
+
+    <div class="incident-search reveal">
+      <span class="search-part mono">$ grep -i "</span>
+      <input type="text" id="incident-search" class="search-input mono" placeholder="keyword…" autocomplete="off" spellcheck="false">
+      <span class="search-part mono">" incidents.log</span>
+    </div>
+    <p class="search-empty mono" id="search-empty" hidden>grep: no matches found</p>
+
+    <div class="incident-list reveal" id="incident-list">
+<!-- INCIDENTS -->
+    </div>
+    <button type="button" class="incident-toggle mono" id="incident-toggle" hidden></button>
+    <p class="anon-note reveal">All incident details above are anonymized — company names, exact traffic figures, and identifying specifics have been changed or generalized. The technical substance is unchanged.</p>
+  </section>
 
   <section id="contact">
     <div class="section-head reveal">
-      <span class="eyebrow mono">$ contact --sre</span>
+      <span class="eyebrow mono">$ contact --me</span>
       <h2>Get in touch</h2>
       <p>Open to SRE, DevOps, and Platform Engineering roles.</p>
     </div>
@@ -599,17 +1085,20 @@
       <span class="out">yuvraj-singh — sre / devops / platform engineer</span>
       <div class="line"><span class="prompt">$</span> cat contact.txt</div>
       <span class="out">email&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:yuvrajdevx@gmail.com">yuvrajdevx@gmail.com</a></span>
-      <span class="out">linkedin&nbsp;<a href="#">linkedin.com/in/yourprofile</a></span>
+      <span class="out">linkedin&nbsp;<a href="https://www.linkedin.com/in/yuvrajdevx">linkedin.com/in/yuvrajdevx</a></span>
       <span class="out">github&nbsp;&nbsp;&nbsp;<a href="https://github.com/yuvrajdevx">github.com/yuvrajdevx</a></span>
-      <a href="#" class="resume-btn">Download résumé (coming soon)</a>
+      <a href="#" class="resume-btn">Resume</a>
     </div>
   </section>
 
 </main>
 
 <footer>
-  Status page built with HTML, CSS, and mild sleep deprivation.<br>
-  Uptime calculated client-side — may drift slightly from reality, much like most dashboards.
+  <div class="log-line">
+    $ tail -f career.log<br>
+    <span class="log-tag-info">[INFO]</span> uptime: since April 2025.<br>
+    <span class="log-tag-warn">[WARN]</span> coffee levels: critical.
+  </div>
 </footer>
 
 <script>
@@ -618,18 +1107,23 @@
   function formatUptime(start){
     const now = new Date();
     let years = now.getFullYear() - start.getFullYear();
-    let temp = new Date(start);
-    temp.setFullYear(start.getFullYear() + years);
-    if (temp > now){ years--; temp.setFullYear(start.getFullYear() + years); }
-    const days = Math.floor((now - temp) / (1000 * 60 * 60 * 24));
-    return years + "y " + days + "d";
+    let months = now.getMonth() - start.getMonth();
+    if (now.getDate() < start.getDate()) months--;
+    if (months < 0){ years--; months += 12; }
+    return years + "yr " + months + "mo";
   }
-  document.getElementById('stat-uptime').textContent = formatUptime(START_DATE);
+  // (Hero stat row is currently commented out in the HTML — these all
+  // null-check first, so they're safe no-ops until it's brought back.)
+  const statUptimeEl = document.getElementById('stat-uptime');
+  if (statUptimeEl) statUptimeEl.textContent = formatUptime(START_DATE);
+  const heroExperienceEl = document.getElementById('hero-experience');
+  if (heroExperienceEl) heroExperienceEl.textContent = formatUptime(START_DATE);
 
   // Count-up animation for stats
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function countUp(el, target, suffix, duration){
+    if (!el) return;
     if (reduceMotion){ el.textContent = target + suffix; return; }
     const start = performance.now();
     function tick(now){
@@ -641,7 +1135,7 @@
     }
     requestAnimationFrame(tick);
   }
-  countUp(document.getElementById('stat-incidents'), 47, '+', 1100);
+  countUp(document.getElementById('stat-incidents'), 30, '+', 1100);
   countUp(document.getElementById('stat-availability'), 99.98, '%', 1100);
 
   // Scroll reveal
@@ -675,6 +1169,180 @@
   } else {
     skillFills.forEach(el => el.style.width = el.dataset.width + '%');
   }
+
+  // ---------- Network background canvas ----------
+  (function(){
+    const canvas = document.getElementById('bg-canvas');
+    if (!canvas || reduceMotion) return;
+    const ctx = canvas.getContext('2d');
+    let w, h, particles;
+    const COLORS = ['rgba(88,166,255,', 'rgba(63,185,80,'];
+    const COUNT = Math.min(70, Math.floor((window.innerWidth * window.innerHeight) / 18000));
+    const LINK_DIST = 130;
+
+    function resize(){
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    function makeParticles(){
+      particles = Array.from({ length: COUNT }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        c: COLORS[Math.floor(Math.random() * COLORS.length)],
+      }));
+    }
+    resize();
+    makeParticles();
+    window.addEventListener('resize', () => { resize(); }, { passive: true });
+
+    let running = true;
+    document.addEventListener('visibilitychange', () => { running = !document.hidden; });
+
+    function tick(){
+      if (running){
+        ctx.clearRect(0, 0, w, h);
+        for (const p of particles){
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > w) p.vx *= -1;
+          if (p.y < 0 || p.y > h) p.vy *= -1;
+        }
+        for (let i = 0; i < particles.length; i++){
+          const a = particles[i];
+          ctx.beginPath();
+          ctx.arc(a.x, a.y, 1.6, 0, Math.PI * 2);
+          ctx.fillStyle = a.c + '0.7)';
+          ctx.fill();
+          for (let j = i + 1; j < particles.length; j++){
+            const b = particles[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < LINK_DIST){
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.strokeStyle = a.c + (0.12 * (1 - dist / LINK_DIST)) + ')';
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  // ---------- Cursor spotlight ----------
+  (function(){
+    const spot = document.getElementById('spotlight');
+    if (!spot || reduceMotion) return;
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    window.addEventListener('mousemove', (e) => {
+      spot.style.left = e.clientX + 'px';
+      spot.style.top = e.clientY + 'px';
+      spot.classList.add('active');
+    }, { passive: true });
+    window.addEventListener('mouseleave', () => spot.classList.remove('active'));
+  })();
+
+  // ---------- Terminal typing sequence ----------
+  (function(){
+    const terminal = document.querySelector('.terminal');
+    if (!terminal) return;
+    const items = Array.from(terminal.querySelectorAll('.line, .out'));
+    if (reduceMotion){
+      items.forEach(el => el.classList.add('typed'));
+      return;
+    }
+    let cursor = document.createElement('span');
+    cursor.className = 'type-cursor';
+
+    function reveal(i){
+      if (i > 0) items[i - 1].querySelector?.('.type-cursor')?.remove();
+      if (i >= items.length){
+        const btn = terminal.querySelector('.resume-btn');
+        if (btn) btn.style.opacity = 1;
+        return;
+      }
+      items[i].classList.add('typed');
+      items[i].appendChild(cursor);
+      setTimeout(() => reveal(i + 1), 140 + Math.random() * 120);
+    }
+
+    const btn = terminal.querySelector('.resume-btn');
+    if (btn) btn.style.opacity = 0;
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          reveal(0);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(terminal);
+  })();
+</script>
+
+<script>
+  // Incident log: show-3-by-default + grep-style search
+  (function(){
+    const list = document.getElementById('incident-list');
+    const toggle = document.getElementById('incident-toggle');
+    const search = document.getElementById('incident-search');
+    const emptyMsg = document.getElementById('search-empty');
+    if (!list || !toggle || !search) return;
+
+    const items = Array.from(list.querySelectorAll('details.incident'));
+    const VISIBLE = 4;
+    let expanded = false;
+
+    function updateToggle(){
+      const extra = items.length - VISIBLE;
+      if (extra <= 0){ toggle.hidden = true; return; }
+      toggle.hidden = false;
+      toggle.textContent = expanded
+        ? '▴ show fewer incidents'
+        : `▾ show ${extra} more incident${extra === 1 ? '' : 's'}`;
+    }
+
+    function applyDefaultView(){
+      items.forEach((item, i) => {
+        item.classList.toggle('is-hidden', !expanded && i >= VISIBLE);
+      });
+      updateToggle();
+    }
+
+    toggle.addEventListener('click', () => {
+      expanded = !expanded;
+      applyDefaultView();
+    });
+
+    search.addEventListener('input', () => {
+      const q = search.value.trim().toLowerCase();
+
+      if (!q){
+        toggle.hidden = items.length - VISIBLE <= 0;
+        emptyMsg.hidden = true;
+        applyDefaultView();
+        return;
+      }
+
+      toggle.hidden = true;
+      let matches = 0;
+      items.forEach((item) => {
+        const hay = item.textContent.toLowerCase();
+        const isMatch = hay.includes(q);
+        item.classList.toggle('is-hidden', !isMatch);
+        if (isMatch) matches++;
+      });
+      emptyMsg.hidden = matches !== 0;
+    });
+
+    applyDefaultView();
+  })();
 </script>
 
 </body>
